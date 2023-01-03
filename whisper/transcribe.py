@@ -313,16 +313,16 @@ def cli():
         audio_basename = os.path.basename(audio_path)
 
         # save TXT
-        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".txt"), "w", encoding="utf-8", flush=flush) as txt:
-            write_txt(result["segments"], file=txt)
+        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".txt"), "w", encoding="utf-8") as txt:
+            write_txt(result["segments"], file=txt, flush=flush)
 
         # save VTT
-        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".vtt"), "w", encoding="utf-8", flush=flush) as vtt:
-            write_vtt(result["segments"], file=vtt)
+        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".vtt"), "w", encoding="utf-8") as vtt:
+            write_vtt(result["segments"], file=vtt, flush=flush)
 
         # save SRT
-        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".srt"), "w", encoding="utf-8", flush=flush) as srt:
-            write_srt(result["segments"], file=srt)
+        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".srt"), "w", encoding="utf-8") as srt:
+            write_srt(result["segments"], file=srt, flush=flush)
 
 
 if __name__ == '__main__':
