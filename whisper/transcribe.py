@@ -256,6 +256,7 @@ def cli():
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu", help="device to use for PyTorch inference")
     parser.add_argument("--output_dir", "-o", type=str, default=".", help="directory to save the outputs")
     parser.add_argument("--output_filename_appendage", type=str, default="", help="append a string to the base of output filename")
+    parser.add_argument("--flush_output", type=bool, default=True, help="whether to flush to output")
     parser.add_argument("--verbose", type=str2bool, default=True, help="whether to print out the progress and debug messages")
 
     parser.add_argument("--task", type=str, default="transcribe", choices=["transcribe", "translate"], help="whether to perform X->X speech recognition ('transcribe') or X->English translation ('translate')")
@@ -305,21 +306,22 @@ def cli():
     from . import load_model
     model = load_model(model_name, device=device, download_root=model_dir)
 
+    flush = args.pop("flush_output")
     for audio_path in args.pop("audio"):
         result = transcribe(model, audio_path, temperature=temperature, **args)
 
         audio_basename = os.path.basename(audio_path)
 
         # save TXT
-        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".txt"), "w", encoding="utf-8") as txt:
+        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".txt"), "w", encoding="utf-8", flush=flush) as txt:
             write_txt(result["segments"], file=txt)
 
         # save VTT
-        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".vtt"), "w", encoding="utf-8") as vtt:
+        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".vtt"), "w", encoding="utf-8", flush=flush) as vtt:
             write_vtt(result["segments"], file=vtt)
 
         # save SRT
-        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".srt"), "w", encoding="utf-8") as srt:
+        with open(os.path.join(output_dir, audio_basename + output_filename_appendage + ".srt"), "w", encoding="utf-8", flush=flush) as srt:
             write_srt(result["segments"], file=srt)
 
 

@@ -45,23 +45,23 @@ def format_timestamp(seconds: float, always_include_hours: bool = False, decimal
     return f"{hours_marker}{minutes:02d}:{seconds:02d}{decimal_marker}{milliseconds:03d}"
 
 
-def write_txt(transcript: Iterator[dict], file: TextIO):
+def write_txt(transcript: Iterator[dict], file: TextIO, flush:bool):
     for segment in transcript:
-        print(segment['text'].strip(), file=file, flush=True)
+        print(segment['text'].strip(), file=file, flush=flush)
 
 
-def write_vtt(transcript: Iterator[dict], file: TextIO):
+def write_vtt(transcript: Iterator[dict], file: TextIO, flush:bool):
     print("WEBVTT\n", file=file)
     for segment in transcript:
         print(
             f"{format_timestamp(segment['start'])} --> {format_timestamp(segment['end'])}\n"
             f"{segment['text'].strip().replace('-->', '->')}\n",
             file=file,
-            flush=True,
+            flush=flush,
         )
 
 
-def write_srt(transcript: Iterator[dict], file: TextIO):
+def write_srt(transcript: Iterator[dict], file: TextIO, flush:bool):
     """
     Write a transcript to a file in SRT format.
 
@@ -84,5 +84,5 @@ def write_srt(transcript: Iterator[dict], file: TextIO):
             f"{format_timestamp(segment['end'], always_include_hours=True, decimal_marker=',')}\n"
             f"{segment['text'].strip().replace('-->', '->')}\n",
             file=file,
-            flush=True,
+            flush=flush,
         )
